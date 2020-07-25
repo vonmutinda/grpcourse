@@ -42,7 +42,7 @@ func start() {
 // doUnary - 
 func doUnary(c greet.GreetServiceClient) {
 
-	req := &greet.GreetRequest{FirstName: "von", SecondName: "Doe"}
+	req := &greet.GreetRequest{FirstName: "John", SecondName: "Doe"}
 
 	greeting, _ := c.Greet(context.Background(), req)
 

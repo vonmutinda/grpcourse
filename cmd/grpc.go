@@ -7,6 +7,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 )
@@ -24,8 +25,10 @@ func init() {
 	rootCmd.AddCommand(grpcServer)
 }
 
-// Greeter -
-type Greeter struct{}
+// Server -
+type Server struct {
+	Logger *logrus.Logger
+}
 
 // RunServer - run grpc server
 func serve() {
@@ -34,26 +37,29 @@ func serve() {
 
 	gs := grpc.NewServer()
 
-	greet.RegisterGreetServiceServer(gs, new(Greeter))
+	greet.RegisterGreetServiceServer(gs, &Server{logrus.New()})
 
 	lis, err := net.Listen("tcp", ":9001")
 
 	if err != nil {
 		log.Fatalf("could not get listener : %v", err)
-	} 
+	}
 
 	if err := gs.Serve(lis); err != nil {
 		log.Fatalf("gRPC server couldn't serve : %v", err)
 	}
 }
 
-// Greet - 
-func (g *Greeter)Greet(ctx context.Context, req *greet.GreetRequest) (*greet.GreetResponse, error){
-	
+// Greet -
+func (g *Server) Greet(ctx context.Context, req *greet.GreetRequest) (*greet.GreetResponse, error) {
+
 	var fName, lName string
 
 	fName = req.GetFirstName()
 	lName = req.GetSecondName()
+
+	// log
+	g.Logger.Infof("Greetings to FirstName : %v LastName : %v", fName, lName)
 
 	greeting := &greet.GreetResponse{
 		Response: fmt.Sprintf("Hello %s %s", fName, lName),
