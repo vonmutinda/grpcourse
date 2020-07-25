@@ -116,7 +116,7 @@ func doPMStream(c greet.GreetServiceClient) {
 			fmt.Printf("could not read from stream : %v", err)
 		}
 
-		fmt.Println(res.GetNumber())
+		fmt.Println(res.GetPrimeFactor())
 	}
 
 	fmt.Println("end of streaming. Bye.")

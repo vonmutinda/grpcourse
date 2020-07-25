@@ -122,14 +122,14 @@ func (g *Server)PrimeNumberDecomposition(req *greet.PMRequest, stream greet.Gree
 
 		if N % n == 0 {
 
-			res := &greet.PMResponse{Number: n}
+			res := &greet.PMResponse{PrimeFactor: n}
 
 			if err := stream.Send(res); err != nil {
 				g.Logger.Errorf("cannot send data to stream : %v", err)
 			}
 
 			N = N/n
-			
+
 		} else {
 
 			n ++

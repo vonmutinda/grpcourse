@@ -42,5 +42,5 @@ message PMRequest {
 }
 
 message PMResponse {
-    int64 number = 1;
+    int64 prime_factor = 1;
 }
