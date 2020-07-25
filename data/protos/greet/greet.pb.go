@@ -24,7 +24,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type GreetRequest struct {
+type Greeting struct {
 	FirstName            string   `protobuf:"bytes,1,opt,name=firstName,proto3" json:"firstName,omitempty"`
 	SecondName           string   `protobuf:"bytes,2,opt,name=secondName,proto3" json:"secondName,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -32,11 +32,57 @@ type GreetRequest struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
+func (m *Greeting) Reset()         { *m = Greeting{} }
+func (m *Greeting) String() string { return proto.CompactTextString(m) }
+func (*Greeting) ProtoMessage()    {}
+func (*Greeting) Descriptor() ([]byte, []int) {
+	return fileDescriptor_32c0044392f32579, []int{0}
+}
+
+func (m *Greeting) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Greeting.Unmarshal(m, b)
+}
+func (m *Greeting) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Greeting.Marshal(b, m, deterministic)
+}
+func (m *Greeting) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Greeting.Merge(m, src)
+}
+func (m *Greeting) XXX_Size() int {
+	return xxx_messageInfo_Greeting.Size(m)
+}
+func (m *Greeting) XXX_DiscardUnknown() {
+	xxx_messageInfo_Greeting.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Greeting proto.InternalMessageInfo
+
+func (m *Greeting) GetFirstName() string {
+	if m != nil {
+		return m.FirstName
+	}
+	return ""
+}
+
+func (m *Greeting) GetSecondName() string {
+	if m != nil {
+		return m.SecondName
+	}
+	return ""
+}
+
+type GreetRequest struct {
+	Greeting             *Greeting `protobuf:"bytes,1,opt,name=greeting,proto3" json:"greeting,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
 func (m *GreetRequest) Reset()         { *m = GreetRequest{} }
 func (m *GreetRequest) String() string { return proto.CompactTextString(m) }
 func (*GreetRequest) ProtoMessage()    {}
 func (*GreetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_32c0044392f32579, []int{0}
+	return fileDescriptor_32c0044392f32579, []int{1}
 }
 
 func (m *GreetRequest) XXX_Unmarshal(b []byte) error {
@@ -57,18 +103,11 @@ func (m *GreetRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GreetRequest proto.InternalMessageInfo
 
-func (m *GreetRequest) GetFirstName() string {
+func (m *GreetRequest) GetGreeting() *Greeting {
 	if m != nil {
-		return m.FirstName
+		return m.Greeting
 	}
-	return ""
-}
-
-func (m *GreetRequest) GetSecondName() string {
-	if m != nil {
-		return m.SecondName
-	}
-	return ""
+	return nil
 }
 
 type GreetResponse struct {
@@ -82,7 +121,7 @@ func (m *GreetResponse) Reset()         { *m = GreetResponse{} }
 func (m *GreetResponse) String() string { return proto.CompactTextString(m) }
 func (*GreetResponse) ProtoMessage()    {}
 func (*GreetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_32c0044392f32579, []int{1}
+	return fileDescriptor_32c0044392f32579, []int{2}
 }
 
 func (m *GreetResponse) XXX_Unmarshal(b []byte) error {
@@ -110,9 +149,179 @@ func (m *GreetResponse) GetResponse() string {
 	return ""
 }
 
+type SumRequest struct {
+	A                    int64    `protobuf:"varint,1,opt,name=a,proto3" json:"a,omitempty"`
+	B                    int64    `protobuf:"varint,2,opt,name=b,proto3" json:"b,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SumRequest) Reset()         { *m = SumRequest{} }
+func (m *SumRequest) String() string { return proto.CompactTextString(m) }
+func (*SumRequest) ProtoMessage()    {}
+func (*SumRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_32c0044392f32579, []int{3}
+}
+
+func (m *SumRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SumRequest.Unmarshal(m, b)
+}
+func (m *SumRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SumRequest.Marshal(b, m, deterministic)
+}
+func (m *SumRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SumRequest.Merge(m, src)
+}
+func (m *SumRequest) XXX_Size() int {
+	return xxx_messageInfo_SumRequest.Size(m)
+}
+func (m *SumRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SumRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SumRequest proto.InternalMessageInfo
+
+func (m *SumRequest) GetA() int64 {
+	if m != nil {
+		return m.A
+	}
+	return 0
+}
+
+func (m *SumRequest) GetB() int64 {
+	if m != nil {
+		return m.B
+	}
+	return 0
+}
+
+type SumResponse struct {
+	Sum                  int64    `protobuf:"varint,1,opt,name=sum,proto3" json:"sum,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SumResponse) Reset()         { *m = SumResponse{} }
+func (m *SumResponse) String() string { return proto.CompactTextString(m) }
+func (*SumResponse) ProtoMessage()    {}
+func (*SumResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_32c0044392f32579, []int{4}
+}
+
+func (m *SumResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SumResponse.Unmarshal(m, b)
+}
+func (m *SumResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SumResponse.Marshal(b, m, deterministic)
+}
+func (m *SumResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SumResponse.Merge(m, src)
+}
+func (m *SumResponse) XXX_Size() int {
+	return xxx_messageInfo_SumResponse.Size(m)
+}
+func (m *SumResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_SumResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SumResponse proto.InternalMessageInfo
+
+func (m *SumResponse) GetSum() int64 {
+	if m != nil {
+		return m.Sum
+	}
+	return 0
+}
+
+// Prime number decomposition messages
+type PMRequest struct {
+	Number               int64    `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *PMRequest) Reset()         { *m = PMRequest{} }
+func (m *PMRequest) String() string { return proto.CompactTextString(m) }
+func (*PMRequest) ProtoMessage()    {}
+func (*PMRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_32c0044392f32579, []int{5}
+}
+
+func (m *PMRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PMRequest.Unmarshal(m, b)
+}
+func (m *PMRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PMRequest.Marshal(b, m, deterministic)
+}
+func (m *PMRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PMRequest.Merge(m, src)
+}
+func (m *PMRequest) XXX_Size() int {
+	return xxx_messageInfo_PMRequest.Size(m)
+}
+func (m *PMRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_PMRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PMRequest proto.InternalMessageInfo
+
+func (m *PMRequest) GetNumber() int64 {
+	if m != nil {
+		return m.Number
+	}
+	return 0
+}
+
+type PMResponse struct {
+	Number               int64    `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *PMResponse) Reset()         { *m = PMResponse{} }
+func (m *PMResponse) String() string { return proto.CompactTextString(m) }
+func (*PMResponse) ProtoMessage()    {}
+func (*PMResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_32c0044392f32579, []int{6}
+}
+
+func (m *PMResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PMResponse.Unmarshal(m, b)
+}
+func (m *PMResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PMResponse.Marshal(b, m, deterministic)
+}
+func (m *PMResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PMResponse.Merge(m, src)
+}
+func (m *PMResponse) XXX_Size() int {
+	return xxx_messageInfo_PMResponse.Size(m)
+}
+func (m *PMResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_PMResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PMResponse proto.InternalMessageInfo
+
+func (m *PMResponse) GetNumber() int64 {
+	if m != nil {
+		return m.Number
+	}
+	return 0
+}
+
 func init() {
+	proto.RegisterType((*Greeting)(nil), "Greeting")
 	proto.RegisterType((*GreetRequest)(nil), "GreetRequest")
 	proto.RegisterType((*GreetResponse)(nil), "GreetResponse")
+	proto.RegisterType((*SumRequest)(nil), "SumRequest")
+	proto.RegisterType((*SumResponse)(nil), "SumResponse")
+	proto.RegisterType((*PMRequest)(nil), "PMRequest")
+	proto.RegisterType((*PMResponse)(nil), "PMResponse")
 }
 
 func init() {
@@ -120,17 +329,26 @@ func init() {
 }
 
 var fileDescriptor_32c0044392f32579 = []byte{
-	// 145 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0xe2, 0x4e, 0x2f, 0x4a, 0x4d,
-	0x2d, 0xd1, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x57, 0xf2, 0xe1, 0xe2, 0x71, 0x07, 0x71, 0x83, 0x52,
-	0x0b, 0x4b, 0x53, 0x8b, 0x4b, 0x84, 0x64, 0xb8, 0x38, 0xd3, 0x32, 0x8b, 0x8a, 0x4b, 0xfc, 0x12,
-	0x73, 0x53, 0x25, 0x18, 0x15, 0x18, 0x35, 0x38, 0x83, 0x10, 0x02, 0x42, 0x72, 0x5c, 0x5c, 0xc5,
-	0xa9, 0xc9, 0xf9, 0x79, 0x29, 0x60, 0x69, 0x26, 0xb0, 0x34, 0x92, 0x88, 0x92, 0x36, 0x17, 0x2f,
-	0xd4, 0xb4, 0xe2, 0x82, 0xfc, 0xbc, 0xe2, 0x54, 0x21, 0x29, 0x2e, 0x8e, 0x22, 0x28, 0x1b, 0x6a,
-	0x1a, 0x9c, 0x6f, 0x64, 0x06, 0xb5, 0x3a, 0x38, 0xb5, 0xa8, 0x2c, 0x33, 0x39, 0x55, 0x48, 0x8d,
-	0x8b, 0x15, 0xcc, 0x17, 0xe2, 0xd5, 0x43, 0x76, 0x92, 0x14, 0x9f, 0x1e, 0x8a, 0x99, 0x49, 0x6c,
-	0x60, 0x97, 0x1b, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0xfc, 0xe4, 0x40, 0x7e, 0xc8, 0x00, 0x00,
-	0x00,
+	// 299 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x84, 0x52, 0xed, 0x4a, 0xc3, 0x30,
+	0x14, 0x25, 0x0e, 0xc7, 0x7a, 0xba, 0x89, 0xe4, 0x87, 0x8c, 0x22, 0x3a, 0xe2, 0x07, 0x03, 0x25,
+	0x8c, 0xc9, 0x1e, 0x40, 0x10, 0xf4, 0x8f, 0x63, 0x74, 0x4f, 0xd0, 0xce, 0x58, 0x02, 0xa6, 0xa9,
+	0x49, 0xeb, 0xdb, 0xf9, 0x6e, 0xb6, 0x21, 0xfd, 0xf0, 0x87, 0xf8, 0xef, 0x9e, 0x7b, 0xcf, 0x3d,
+	0xf7, 0x9c, 0x36, 0x08, 0x33, 0x23, 0x44, 0xc9, 0x0b, 0xa3, 0x4b, 0xcd, 0x5e, 0x30, 0x79, 0x6e,
+	0xa0, 0xcc, 0x33, 0x7a, 0x8e, 0xe0, 0x5d, 0x1a, 0x5b, 0x6e, 0x13, 0x25, 0xe6, 0x64, 0x41, 0x96,
+	0x41, 0xdc, 0x37, 0xe8, 0x05, 0x60, 0xc5, 0x41, 0xe7, 0x6f, 0x6e, 0x7c, 0xe4, 0xc6, 0x83, 0x0e,
+	0xdb, 0x60, 0xea, 0x94, 0x62, 0xf1, 0x59, 0x09, 0x5b, 0xd2, 0x1b, 0x4c, 0x32, 0xaf, 0xec, 0xc4,
+	0xc2, 0x75, 0xc0, 0xdb, 0x53, 0x71, 0x37, 0x62, 0x77, 0x98, 0xf9, 0x35, 0x5b, 0xe8, 0xdc, 0x0a,
+	0x1a, 0x61, 0x62, 0x7c, 0xed, 0x4d, 0x74, 0x98, 0x2d, 0x81, 0x7d, 0xa5, 0xda, 0x0b, 0x53, 0x90,
+	0xc4, 0x51, 0x46, 0x31, 0x49, 0x1a, 0x94, 0x3a, 0x5b, 0x35, 0x4a, 0xd9, 0x25, 0x42, 0xc7, 0xf4,
+	0xa2, 0xa7, 0x18, 0xd9, 0x4a, 0x79, 0x72, 0x53, 0xb2, 0x2b, 0x04, 0xbb, 0xd7, 0x56, 0xe9, 0x0c,
+	0xe3, 0xbc, 0x52, 0xa9, 0x30, 0x9e, 0xe1, 0x11, 0xbb, 0x06, 0x1a, 0x92, 0x17, 0xf9, 0x83, 0xb5,
+	0xfe, 0x26, 0x3e, 0xfa, 0x5e, 0x98, 0x2f, 0x79, 0x10, 0xf4, 0x16, 0xc7, 0x0e, 0xd3, 0x19, 0x1f,
+	0x7e, 0x92, 0xe8, 0x84, 0xff, 0x8e, 0xba, 0xc0, 0xa8, 0x36, 0x49, 0x43, 0xde, 0x87, 0x8a, 0xa6,
+	0x7c, 0xe8, 0xfb, 0x1e, 0x81, 0x5b, 0x79, 0xfc, 0xd0, 0xff, 0xa9, 0xad, 0x08, 0xdd, 0x60, 0xbe,
+	0x33, 0x52, 0x89, 0xad, 0xf3, 0xf5, 0x54, 0xff, 0x1b, 0x55, 0x68, 0x2b, 0x4b, 0xa9, 0x73, 0x0a,
+	0xde, 0xc5, 0x8d, 0x42, 0xde, 0xa7, 0x5a, 0x91, 0x74, 0xec, 0x9e, 0xc2, 0xc3, 0x4f, 0x00, 0x00,
+	0x00, 0xff, 0xff, 0x47, 0xa8, 0xab, 0xf8, 0x19, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -146,6 +364,12 @@ const _ = grpc.SupportPackageIsVersion6
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type GreetServiceClient interface {
 	Greet(ctx context.Context, in *GreetRequest, opts ...grpc.CallOption) (*GreetResponse, error)
+	// Exercise: I'll add this one here because I'm lazy
+	Sum(ctx context.Context, in *SumRequest, opts ...grpc.CallOption) (*SumResponse, error)
+	// Server streaming RPC
+	GreetAlot(ctx context.Context, in *GreetRequest, opts ...grpc.CallOption) (GreetService_GreetAlotClient, error)
+	// Exercise:
+	PrimeNumberDecomposition(ctx context.Context, in *PMRequest, opts ...grpc.CallOption) (GreetService_PrimeNumberDecompositionClient, error)
 }
 
 type greetServiceClient struct {
@@ -165,9 +389,88 @@ func (c *greetServiceClient) Greet(ctx context.Context, in *GreetRequest, opts .
 	return out, nil
 }
 
+func (c *greetServiceClient) Sum(ctx context.Context, in *SumRequest, opts ...grpc.CallOption) (*SumResponse, error) {
+	out := new(SumResponse)
+	err := c.cc.Invoke(ctx, "/GreetService/Sum", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *greetServiceClient) GreetAlot(ctx context.Context, in *GreetRequest, opts ...grpc.CallOption) (GreetService_GreetAlotClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_GreetService_serviceDesc.Streams[0], "/GreetService/GreetAlot", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &greetServiceGreetAlotClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type GreetService_GreetAlotClient interface {
+	Recv() (*GreetResponse, error)
+	grpc.ClientStream
+}
+
+type greetServiceGreetAlotClient struct {
+	grpc.ClientStream
+}
+
+func (x *greetServiceGreetAlotClient) Recv() (*GreetResponse, error) {
+	m := new(GreetResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *greetServiceClient) PrimeNumberDecomposition(ctx context.Context, in *PMRequest, opts ...grpc.CallOption) (GreetService_PrimeNumberDecompositionClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_GreetService_serviceDesc.Streams[1], "/GreetService/PrimeNumberDecomposition", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &greetServicePrimeNumberDecompositionClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type GreetService_PrimeNumberDecompositionClient interface {
+	Recv() (*PMResponse, error)
+	grpc.ClientStream
+}
+
+type greetServicePrimeNumberDecompositionClient struct {
+	grpc.ClientStream
+}
+
+func (x *greetServicePrimeNumberDecompositionClient) Recv() (*PMResponse, error) {
+	m := new(PMResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // GreetServiceServer is the server API for GreetService service.
 type GreetServiceServer interface {
 	Greet(context.Context, *GreetRequest) (*GreetResponse, error)
+	// Exercise: I'll add this one here because I'm lazy
+	Sum(context.Context, *SumRequest) (*SumResponse, error)
+	// Server streaming RPC
+	GreetAlot(*GreetRequest, GreetService_GreetAlotServer) error
+	// Exercise:
+	PrimeNumberDecomposition(*PMRequest, GreetService_PrimeNumberDecompositionServer) error
 }
 
 // UnimplementedGreetServiceServer can be embedded to have forward compatible implementations.
@@ -176,6 +479,15 @@ type UnimplementedGreetServiceServer struct {
 
 func (*UnimplementedGreetServiceServer) Greet(ctx context.Context, req *GreetRequest) (*GreetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Greet not implemented")
+}
+func (*UnimplementedGreetServiceServer) Sum(ctx context.Context, req *SumRequest) (*SumResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Sum not implemented")
+}
+func (*UnimplementedGreetServiceServer) GreetAlot(req *GreetRequest, srv GreetService_GreetAlotServer) error {
+	return status.Errorf(codes.Unimplemented, "method GreetAlot not implemented")
+}
+func (*UnimplementedGreetServiceServer) PrimeNumberDecomposition(req *PMRequest, srv GreetService_PrimeNumberDecompositionServer) error {
+	return status.Errorf(codes.Unimplemented, "method PrimeNumberDecomposition not implemented")
 }
 
 func RegisterGreetServiceServer(s *grpc.Server, srv GreetServiceServer) {
@@ -200,6 +512,66 @@ func _GreetService_Greet_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GreetService_Sum_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SumRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GreetServiceServer).Sum(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/GreetService/Sum",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GreetServiceServer).Sum(ctx, req.(*SumRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _GreetService_GreetAlot_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GreetRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(GreetServiceServer).GreetAlot(m, &greetServiceGreetAlotServer{stream})
+}
+
+type GreetService_GreetAlotServer interface {
+	Send(*GreetResponse) error
+	grpc.ServerStream
+}
+
+type greetServiceGreetAlotServer struct {
+	grpc.ServerStream
+}
+
+func (x *greetServiceGreetAlotServer) Send(m *GreetResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _GreetService_PrimeNumberDecomposition_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(PMRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(GreetServiceServer).PrimeNumberDecomposition(m, &greetServicePrimeNumberDecompositionServer{stream})
+}
+
+type GreetService_PrimeNumberDecompositionServer interface {
+	Send(*PMResponse) error
+	grpc.ServerStream
+}
+
+type greetServicePrimeNumberDecompositionServer struct {
+	grpc.ServerStream
+}
+
+func (x *greetServicePrimeNumberDecompositionServer) Send(m *PMResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 var _GreetService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "GreetService",
 	HandlerType: (*GreetServiceServer)(nil),
@@ -208,7 +580,22 @@ var _GreetService_serviceDesc = grpc.ServiceDesc{
 			MethodName: "Greet",
 			Handler:    _GreetService_Greet_Handler,
 		},
+		{
+			MethodName: "Sum",
+			Handler:    _GreetService_Sum_Handler,
+		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GreetAlot",
+			Handler:       _GreetService_GreetAlot_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "PrimeNumberDecomposition",
+			Handler:       _GreetService_PrimeNumberDecomposition_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "greet.proto",
 }

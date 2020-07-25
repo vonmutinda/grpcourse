@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"grpcourse/data/protos/greet"
+	"io"
+	"log"
 
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
@@ -34,17 +36,88 @@ func start() {
 
 	client := greet.NewGreetServiceClient(conn)
 
-	// 1. Unary implementation 
+	// 1. Unary implementation
 	doUnary(client)
+
+	// 2. Server streaming implementation
+	// doGreetStream(client)
+	doPMStream(client)
 
 }
 
-// doUnary - 
+// doUnary -
 func doUnary(c greet.GreetServiceClient) {
 
-	req := &greet.GreetRequest{FirstName: "John", SecondName: "Doe"}
+	req1 := &greet.GreetRequest{Greeting: &greet.Greeting{FirstName: "Jon", SecondName: "Snow"}}
+	req2 := &greet.SumRequest{A: 10, B: 10}
 
-	greeting, _ := c.Greet(context.Background(), req)
+	greeting, _ := c.Greet(context.Background(), req1)
 
-	fmt.Println("Greetings :\n ", greeting.Response)
+	sum, _ := c.Sum(context.Background(), req2)
+
+	fmt.Println("Greetings :\n", greeting.Response)
+
+	fmt.Printf("Sum of %v and %v = %v\n", req2.A, req2.B, sum.Sum)
+
+}
+
+// doGreetStream -
+func doGreetStream(c greet.GreetServiceClient) {
+
+	req := &greet.GreetRequest{
+		Greeting: &greet.Greeting{FirstName: "Jane", SecondName: "Doe"},
+	}
+
+	stream, err := c.GreetAlot(context.Background(), req)
+
+	if err != nil {
+		log.Fatalf("cannot stream greetings : %v", err)
+	}
+
+	for {
+		res, err := stream.Recv()
+
+		if err == io.EOF {
+			// end of stream
+			break
+		}
+
+		if err != nil {
+			log.Fatalf("cannot receive greating from stream : %v", err)
+		}
+
+		fmt.Println("messages : ", res.GetResponse())
+	}
+
+	fmt.Println("end of streaming. Bye.")
+
+}
+
+// doPMStream -
+func doPMStream(c greet.GreetServiceClient) {
+
+	req := &greet.PMRequest{Number: 120}
+
+	stream, err := c.PrimeNumberDecomposition(context.Background(), req)
+
+	if err != nil {
+		log.Fatalf("cannot stream prime numbers : %v", err)
+	}
+
+	for {
+
+		res, err := stream.Recv()
+
+		if err == io.EOF {
+			break
+		}
+
+		if err != nil {
+			fmt.Printf("could not read from stream : %v", err)
+		}
+
+		fmt.Println(res.GetNumber())
+	}
+
+	fmt.Println("end of streaming. Bye.")
 }

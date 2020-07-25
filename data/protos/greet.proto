@@ -1,14 +1,46 @@
 syntax = "proto3";
 
 service GreetService {
+    
     rpc Greet(GreetRequest) returns (GreetResponse);
+
+    // Exercise: I'll add this one here because I'm lazy
+    rpc Sum(SumRequest) returns (SumResponse);
+
+    // Server streaming RPC
+    rpc GreetAlot(GreetRequest) returns(stream GreetResponse);
+
+    // Exercise: 
+    rpc PrimeNumberDecomposition (PMRequest) returns (stream PMResponse);
 }
 
-message GreetRequest {
+message Greeting {
     string firstName = 1;
     string secondName =2;
 }
 
+message GreetRequest {
+    Greeting greeting = 1;
+}
+
 message GreetResponse {
     string response = 1;
+}
+
+message SumRequest {
+    int64 a = 1;
+    int64 b = 2;
+}
+
+message SumResponse {
+    int64 sum = 1;
+}
+
+// Prime number decomposition messages
+message PMRequest {
+    int64 number = 1;
+}
+
+message PMResponse {
+    int64 number = 1;
 }
