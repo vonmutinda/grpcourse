@@ -40,8 +40,10 @@ func start() {
 	doUnary(client)
 
 	// 2. Server streaming implementation
-	// doGreetStream(client)
+	doGreetStream(client)
 	doPMStream(client)
+
+	//3. 
 
 }
 
@@ -77,9 +79,8 @@ func doGreetStream(c greet.GreetServiceClient) {
 	for {
 		res, err := stream.Recv()
 
-		if err == io.EOF {
-			// end of stream
-			break
+		if err == io.EOF { 
+			break // end of stream
 		}
 
 		if err != nil {

@@ -2,11 +2,11 @@
 - A code along repo for [Udemy's gRPC [Golang] Masterclass course](https://www.udemy.com/course/grpc-golang/)
 
 ## Description
-- `gRPC` is a `RPC` framework developed by Google for building high performance APIs. It's uses [Protocol Buffers](https://developers.google.com/protocol-buffers) as the interface definition language. gRPC payloads are significantly smaller than a JSON equivalents hence faster low latency over the wire. A good alternative for REST API. 
+- `gRPC` is a `RPC` framework developed by Google for building high performance APIs. It's uses [Protocol Buffers](https://developers.google.com/protocol-buffers) as the interface definition language. gRPC payloads are significantly smaller than a JSON equivalents hence faster :- low latency over the wire. A good alternative for REST API. 
 
 ## Concepts Explored
 - [x] Unary Streaming 
-- [ ] Server Streaming
+- [x] Server Streaming
 - [ ] Client Streaming  
 - [ ] Bi-directional Streaming 
 - [ ] Error Hanlding
@@ -14,15 +14,15 @@
 - [ ] CRUD with MongoDB 
 
 ### Local Set Up
-+ Clone the app `git clone https://github.com/vonmutinda/pipeline.git`
-+ Install [Docker](https://docs.docker.com/engine/install/) on your machine. 
++ Clone the app `git clone https://github.com/vonmutinda/grpcourse.git` 
++ Inspect the `Makefile` for the various commands of interracting with the app. 
 
 ## Technologies Used 
 A list of technologies used in this project:
 - [Golang version `go1.14.6`](https://golang.org) 
-- [gRPC](https://github.com/grpc/grpc-go) gRPC framework.
+- [gRPC](https://github.com/grpc/grpc-go) A RPC framework that leverages on `HTTP/2` protocol powerful multiplexing capabilites.
 
-## Resources 
+## Resources (Further Read)
 Some of the resources that I found useful `Go/Golang`. 
 - [Protocol Buffers](https://developers.google.com/protocol-buffers)
 - [gRPC](https://grpc.io/)
