@@ -34,10 +34,17 @@ func start() {
 
 	client := greet.NewGreetServiceClient(conn)
 
-	// 1. Let's greet someone 
-	req := &greet.GreetRequest{FirstName: "von",  SecondName: "Doe"}
+	// 1. Unary implementation 
+	doUnary(client)
 
-	greeting, _ := client.Greet(context.Background(), req)
+}
+
+// doUnary - 
+func doUnary(c greet.GreetServiceClient) {
+
+	req := &greet.GreetRequest{FirstName: "von", SecondName: "Doe"}
+
+	greeting, _ := c.Greet(context.Background(), req)
 
 	fmt.Println("Greetings :\n ", greeting.Response)
 }
