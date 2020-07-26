@@ -6,6 +6,7 @@ import (
 	"grpcourse/data/protos/greet"
 	"io"
 	"log"
+	"math"
 	"net"
 	"strconv"
 	"time"
@@ -13,6 +14,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 var grpcServer = &cobra.Command{
@@ -77,12 +80,19 @@ func (g *Server) Sum(ctx context.Context, req *greet.SumRequest) (*greet.SumResp
 
 	g.Logger.Infof("Sum func invoked")
 
+	if ctx.Err() == context.Canceled {
+		g.Logger.Infof("Request cancelled by client")
+		return nil, status.Errorf(codes.DeadlineExceeded, "client cancelled the request : %v", ctx.Err())
+	}
+
 	var a, b int64
 
 	a = req.GetA()
 	b = req.GetB()
 
 	g.Logger.Infof("Sum of A : %v and B : %v = %v", a, b, a+b)
+
+	time.Sleep(4*time.Second)
 
 	return &greet.SumResponse{Sum: a + b}, nil
 }
@@ -208,8 +218,8 @@ func (g *Server) ComputeAverage(stream greet.GreetService_ComputeAverageServer) 
 
 }
 
-// GreetEveryone - 
-func (g *Server)GreetEveryone(stream greet.GreetService_GreetEveryoneServer) error {
+// GreetEveryone -
+func (g *Server) GreetEveryone(stream greet.GreetService_GreetEveryoneServer) error {
 
 	g.Logger.Infof("GreetEveryone func invoked")
 
@@ -218,15 +228,15 @@ func (g *Server)GreetEveryone(stream greet.GreetService_GreetEveryoneServer) err
 		req, err := stream.Recv()
 
 		if err == io.EOF {
-			g.Logger.Infof("GreetEveryone stream is done for") 
+			g.Logger.Infof("GreetEveryone stream is done for")
 			return nil
-		} 
+		}
 
 		if err != nil {
 			return fmt.Errorf("could not read greetings from client stream : %v", err)
 		}
 
-		res := &greet.GreetResponse{ Response: "Hi " + req.Greeting.FirstName }
+		res := &greet.GreetResponse{Response: "Hi " + req.Greeting.FirstName}
 
 		if err := stream.Send(res); err != nil {
 			g.Logger.Fatalf("cannot send greet everyone res : %v", err)
@@ -234,5 +244,22 @@ func (g *Server)GreetEveryone(stream greet.GreetService_GreetEveryoneServer) err
 			return err
 		}
 	}
-	
+
+}
+
+// SquareRoot -
+func (g *Server) SquareRoot(ctx context.Context, req *greet.SquareRootRequest) (*greet.SquareRootResponse, error) {
+
+	g.Logger.Infof("SquareRoot func invoked")
+
+	num := req.GetNumber()
+
+	if num < 0 {
+
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("received a negative number : %v", num))
+	}
+
+	res := &greet.SquareRootResponse{Square: math.Sqrt(float64(num))}
+
+	return res, nil
 }

@@ -19,11 +19,16 @@ service GreetService {
     // Exercise :
     rpc ComputeAverage(stream NumberRequest) returns (AverageResponse);
 
-
     // BiDi streaming 
     rpc GreetEveryone(stream GreetRequest) returns (stream GreetResponse);
+
+    // ------- ERROR sections -------------
+
+    // Thow INVALID_ARGUMENT if arg is negative
+    rpc SquareRoot(SquareRootRequest) returns (SquareRootResponse);
 }
 
+// Greeting related RPCs
 message Greeting {
     string firstName = 1;
     string secondName =2;
@@ -37,6 +42,7 @@ message GreetResponse {
     string response = 1;
 }
 
+// Sum rpc - 
 message SumRequest {
     int64 a = 1;
     int64 b = 2;
@@ -55,10 +61,20 @@ message PMResponse {
     int64 prime_factor = 1;
 }
 
+// ComputeAverage -
 message NumberRequest {
     int64 number = 1;
 }
 
 message AverageResponse {
     double average = 1;
+}
+
+// SquareRoot rpc
+message SquareRootRequest {
+    int32 number = 1;
+}
+
+message SquareRootResponse {
+    double square = 1;
 }

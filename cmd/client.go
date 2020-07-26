@@ -11,6 +11,8 @@ import (
 
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 var grpcClient = &cobra.Command{
@@ -38,36 +40,87 @@ func start() {
 
 	client := greet.NewGreetServiceClient(conn)
 
+	// Rather than creating a branch for each implementation,
+	// all func will be done here.. comment/uncomment appropriately.
+
 	// 1. Unary implementation
 	doUnary(client)
+	doUnarySum(client)
 
 	// 2. Server streaming implementation
-	doGreetStream(client)
-	doPMStream(client)
+	// doGreetStream(client)
+	// doPMStream(client)
 
 	//3. Client streaming
-	doClientStreaming(client)
-	doComputeAverage(client)
+	// doClientStreaming(client)
+	// doComputeAverage(client)
 
 	// 4. BiDi streaming
-	doBiDiStreaming(client)
+	// doBiDiStreaming(client)
+
+	// ----------- 5. Advanced concepts
+	// (Error Handling)
+	// doSquareRoot(client)
 
 }
 
-// doUnary -
+// doUnary - Unary RPC implementation for Greet
 func doUnary(c greet.GreetServiceClient) {
 
 	req1 := &greet.GreetRequest{Greeting: &greet.Greeting{FirstName: "Jon", SecondName: "Snow"}}
-	req2 := &greet.SumRequest{A: 10, B: 10}
 
-	greeting, _ := c.Greet(context.Background(), req1)
+	// Deadlines with gRPC, create a context with timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 
-	sum, _ := c.Sum(context.Background(), req2)
+	defer cancel()
+
+	greeting, err := c.Greet(ctx, req1)
+
+	if err != nil {
+
+		resErr, ok := status.FromError(err)
+
+		if ok {
+
+			if resErr.Code() == codes.DeadlineExceeded {
+				log.Printf("Timeout : %v", resErr.Message())
+			}
+		}
+
+		log.Printf("could not greet : %v", err)
+	}
 
 	fmt.Println("Greetings :\n", greeting.Response)
+}
+
+func doUnarySum(c greet.GreetServiceClient) {
+
+	req2 := &greet.SumRequest{A: 10, B: 10}
+
+	// Deadlines with gRPC, create a context with timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+
+	defer cancel()
+
+	sum, err := c.Sum(ctx, req2)
+
+	if err != nil {
+
+		resErr, ok := status.FromError(err)
+
+		if !ok {
+
+			log.Printf("could not do sum of %v + %v : %v", req2.GetA(), req2.GetB(), err)
+		}
+
+		if resErr.Code() == codes.DeadlineExceeded {
+			log.Printf("Timeout : %v", resErr.Message())
+		}
+
+		return
+	}
 
 	fmt.Printf("Sum of %v and %v = %v\n", req2.A, req2.B, sum.Sum)
-
 }
 
 // doGreetStream - stream data from server
@@ -260,4 +313,31 @@ func doBiDiStreaming(c greet.GreetServiceClient) {
 	}()
 
 	<-done
+}
+
+// doSquareRoot -
+func doSquareRoot(c greet.GreetServiceClient) {
+
+	req := &greet.SquareRootRequest{Number: -25}
+
+	sqc, err := c.SquareRoot(context.Background(), req)
+
+	if err != nil {
+
+		resErr, ok := status.FromError(err)
+
+		if !ok {
+			log.Fatalf("could not do square root of %v : %v", req.Number, err)
+			return
+		}
+
+		if resErr.Code() == codes.InvalidArgument {
+			// do something
+			log.Fatalf("invalid argument : %v", resErr.Message())
+			return
+		}
+
+	}
+
+	fmt.Printf("SquareRoot of %v : %v\n", req.Number, sqc.GetSquare())
 }
