@@ -9,7 +9,7 @@
 - [x] Server Streaming
 - [x] Client Streaming  
 - [x] Bi-directional Streaming 
-- [ ] Error Hanlding
+- [x] Error Handling & RPC deadlines
 - [ ] Security
 - [ ] CRUD with MongoDB 
 

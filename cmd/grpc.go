@@ -15,6 +15,7 @@ import (
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
 )
 
@@ -41,9 +42,32 @@ func serve() {
 
 	fmt.Println("gRPC server running...")
 
-	gs := grpc.NewServer()
+	// Server instance
+	svr := &Server{logrus.New()}
+	
+	tls := true 
 
-	greet.RegisterGreetServiceServer(gs, &Server{logrus.New()})
+	opts := []grpc.ServerOption{}
+
+	if tls {
+
+		// cert and pem - pass full path
+		cert := "ssl/server.crt"
+		pem := "ssl/server.pem"
+	
+		cred, err := credentials.NewServerTLSFromFile(cert, pem)
+	
+		if err != nil {
+			svr.Logger.Errorf("cannot creat tls cert from file : %v", err)
+		}
+	
+		// gRPC server with opts
+		opts = append(opts, grpc.Creds(cred))
+	} 
+
+	gs := grpc.NewServer(opts...)
+
+	greet.RegisterGreetServiceServer(gs, svr)
 
 	lis, err := net.Listen("tcp", ":9001")
 
@@ -92,7 +116,7 @@ func (g *Server) Sum(ctx context.Context, req *greet.SumRequest) (*greet.SumResp
 
 	g.Logger.Infof("Sum of A : %v and B : %v = %v", a, b, a+b)
 
-	time.Sleep(4*time.Second)
+	time.Sleep(4 * time.Second)
 
 	return &greet.SumResponse{Sum: a + b}, nil
 }

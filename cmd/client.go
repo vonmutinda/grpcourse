@@ -12,6 +12,7 @@ import (
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
 )
 
@@ -30,7 +31,28 @@ func init() {
 
 func start() {
 
-	conn, err := grpc.Dial(":9001", grpc.WithInsecure())
+	// by default
+	tls := true
+
+	opts := grpc.WithInsecure()
+
+	if tls {
+
+		cert := "ssl/ca.crt" // Certificate Authority Trust
+
+		creds, err := credentials.NewClientTLSFromFile(cert, "")
+
+		if err != nil {
+			log.Fatalf("could not construct TLS credentials : %v", err)
+			return
+		}
+
+		opts = grpc.WithTransportCredentials(creds)
+	}
+
+	// grpc.Dial(target should be explicit rather than the port)
+	// eg. "localhost:PORT" rather than ":PORT"
+	conn, err := grpc.Dial("localhost:9001", opts)
 
 	if err != nil {
 		panic("could not establish connection")
@@ -45,7 +67,7 @@ func start() {
 
 	// 1. Unary implementation
 	doUnary(client)
-	doUnarySum(client)
+	// doUnarySum(client)
 
 	// 2. Server streaming implementation
 	// doGreetStream(client)
