@@ -314,6 +314,84 @@ func (m *PMResponse) GetPrimeFactor() int64 {
 	return 0
 }
 
+type NumberRequest struct {
+	Number               int64    `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *NumberRequest) Reset()         { *m = NumberRequest{} }
+func (m *NumberRequest) String() string { return proto.CompactTextString(m) }
+func (*NumberRequest) ProtoMessage()    {}
+func (*NumberRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_32c0044392f32579, []int{7}
+}
+
+func (m *NumberRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_NumberRequest.Unmarshal(m, b)
+}
+func (m *NumberRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_NumberRequest.Marshal(b, m, deterministic)
+}
+func (m *NumberRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NumberRequest.Merge(m, src)
+}
+func (m *NumberRequest) XXX_Size() int {
+	return xxx_messageInfo_NumberRequest.Size(m)
+}
+func (m *NumberRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_NumberRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NumberRequest proto.InternalMessageInfo
+
+func (m *NumberRequest) GetNumber() int64 {
+	if m != nil {
+		return m.Number
+	}
+	return 0
+}
+
+type AverageResponse struct {
+	Average              float64  `protobuf:"fixed64,1,opt,name=average,proto3" json:"average,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *AverageResponse) Reset()         { *m = AverageResponse{} }
+func (m *AverageResponse) String() string { return proto.CompactTextString(m) }
+func (*AverageResponse) ProtoMessage()    {}
+func (*AverageResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_32c0044392f32579, []int{8}
+}
+
+func (m *AverageResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AverageResponse.Unmarshal(m, b)
+}
+func (m *AverageResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AverageResponse.Marshal(b, m, deterministic)
+}
+func (m *AverageResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AverageResponse.Merge(m, src)
+}
+func (m *AverageResponse) XXX_Size() int {
+	return xxx_messageInfo_AverageResponse.Size(m)
+}
+func (m *AverageResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_AverageResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AverageResponse proto.InternalMessageInfo
+
+func (m *AverageResponse) GetAverage() float64 {
+	if m != nil {
+		return m.Average
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*Greeting)(nil), "Greeting")
 	proto.RegisterType((*GreetRequest)(nil), "GreetRequest")
@@ -322,6 +400,8 @@ func init() {
 	proto.RegisterType((*SumResponse)(nil), "SumResponse")
 	proto.RegisterType((*PMRequest)(nil), "PMRequest")
 	proto.RegisterType((*PMResponse)(nil), "PMResponse")
+	proto.RegisterType((*NumberRequest)(nil), "NumberRequest")
+	proto.RegisterType((*AverageResponse)(nil), "AverageResponse")
 }
 
 func init() {
@@ -329,27 +409,31 @@ func init() {
 }
 
 var fileDescriptor_32c0044392f32579 = []byte{
-	// 314 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x84, 0x52, 0xd1, 0x4a, 0xf3, 0x30,
-	0x18, 0x25, 0xff, 0xf8, 0xc7, 0x7a, 0xda, 0x89, 0xe4, 0x42, 0x46, 0x11, 0x9d, 0x11, 0x65, 0xa0,
-	0xc4, 0x31, 0xd9, 0x03, 0x08, 0xa2, 0xde, 0x38, 0x46, 0xf7, 0x00, 0xd2, 0xce, 0x6c, 0x14, 0x6c,
-	0x53, 0x93, 0xd4, 0xb7, 0xf3, 0xdd, 0x5c, 0x3f, 0xd2, 0xad, 0x5e, 0x79, 0x97, 0x73, 0xbe, 0x93,
-	0x93, 0x73, 0xbe, 0x16, 0xe1, 0xd6, 0x28, 0xe5, 0x64, 0x65, 0xb4, 0xd3, 0xe2, 0x05, 0x83, 0xe7,
-	0x06, 0xe6, 0xe5, 0x96, 0x9f, 0x22, 0xd8, 0xe4, 0xc6, 0xba, 0x45, 0x5a, 0xa8, 0x11, 0x1b, 0xb3,
-	0x49, 0x90, 0x1c, 0x08, 0x7e, 0x06, 0x58, 0xb5, 0xd6, 0xe5, 0x3b, 0x8d, 0xff, 0xd1, 0xb8, 0xc3,
-	0x88, 0x39, 0x22, 0x72, 0x4a, 0xd4, 0x67, 0xad, 0xac, 0xe3, 0x57, 0x18, 0x6c, 0xbd, 0x33, 0x99,
-	0x85, 0xb3, 0x40, 0xb6, 0x4f, 0x25, 0xfb, 0x91, 0xb8, 0xc1, 0xd0, 0x5f, 0xb3, 0x95, 0x2e, 0xad,
-	0xe2, 0x31, 0x06, 0xc6, 0x9f, 0x7d, 0x88, 0x3d, 0x16, 0x13, 0x60, 0x55, 0x17, 0xed, 0x0b, 0x11,
-	0x58, 0x4a, 0x92, 0x5e, 0xc2, 0xd2, 0x06, 0x65, 0x14, 0x6b, 0x87, 0x32, 0x71, 0x8e, 0x90, 0x94,
-	0xde, 0xf4, 0x18, 0x3d, 0x5b, 0x17, 0x5e, 0xdc, 0x1c, 0xc5, 0x25, 0x82, 0xe5, 0x6b, 0xeb, 0x74,
-	0x82, 0x7e, 0x59, 0x17, 0x99, 0x32, 0x5e, 0xe1, 0x91, 0xb8, 0x03, 0x1a, 0x91, 0x37, 0xb9, 0x40,
-	0x54, 0x99, 0xbc, 0x50, 0x6f, 0x9b, 0x74, 0xed, 0x74, 0xab, 0x0d, 0x89, 0x7b, 0x22, 0x6a, 0xf6,
-	0xcd, 0xfc, 0x16, 0x56, 0xca, 0x7c, 0xe5, 0x6b, 0xc5, 0xaf, 0xf1, 0x9f, 0x30, 0x1f, 0xca, 0xee,
-	0x76, 0xe2, 0x23, 0xf9, 0xbb, 0xf5, 0x18, 0xbd, 0x5d, 0x5e, 0x1e, 0xca, 0x43, 0xbf, 0x38, 0x92,
-	0xdd, 0x0a, 0xb7, 0x08, 0xe8, 0xca, 0xc3, 0x87, 0xfe, 0xcb, 0x6d, 0xca, 0xf8, 0x1c, 0xa3, 0x65,
-	0x93, 0x6b, 0x41, 0x45, 0x1e, 0x77, 0x9f, 0xa9, 0xa8, 0xb4, 0xcd, 0x5d, 0xae, 0x4b, 0x0e, 0xb9,
-	0x6f, 0x1e, 0x87, 0xf2, 0x50, 0x70, 0xca, 0xb2, 0x3e, 0xfd, 0x15, 0xf7, 0x3f, 0x01, 0x00, 0x00,
-	0xff, 0xff, 0x68, 0x07, 0xae, 0xe3, 0x24, 0x02, 0x00, 0x00,
+	// 373 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x8c, 0x92, 0xd1, 0x4e, 0xc2, 0x30,
+	0x14, 0x86, 0x53, 0x88, 0xc8, 0xce, 0x06, 0x92, 0x5e, 0x18, 0xb2, 0x18, 0xc5, 0x1a, 0x75, 0x09,
+	0xa6, 0x1a, 0x94, 0x07, 0x20, 0x1a, 0xf5, 0x42, 0x09, 0x19, 0x0f, 0x60, 0x36, 0x2c, 0xcb, 0x12,
+	0xb7, 0xce, 0x6e, 0xe3, 0x7d, 0x7c, 0x53, 0xb7, 0x43, 0x37, 0xc0, 0x1b, 0xbc, 0xeb, 0x7f, 0xfa,
+	0x9f, 0xff, 0x9c, 0x7e, 0x1b, 0x98, 0x81, 0x12, 0x22, 0xe3, 0x89, 0x92, 0x99, 0x64, 0xaf, 0xd0,
+	0x7e, 0x29, 0x65, 0x18, 0x07, 0xf4, 0x04, 0x8c, 0x65, 0xa8, 0xd2, 0x6c, 0xea, 0x45, 0xa2, 0x4f,
+	0x06, 0xc4, 0x31, 0xdc, 0x4d, 0x81, 0x9e, 0x02, 0xa4, 0x62, 0x21, 0xe3, 0x4f, 0xbc, 0x6e, 0xe0,
+	0xf5, 0x56, 0x85, 0x8d, 0xc1, 0xc2, 0x24, 0x57, 0x7c, 0xe7, 0x22, 0xcd, 0xe8, 0x25, 0xb4, 0x03,
+	0x9d, 0x8c, 0x61, 0xe6, 0xc8, 0xe0, 0xd5, 0x28, 0xb7, 0xbe, 0x62, 0x43, 0xe8, 0xe8, 0xb6, 0x34,
+	0x91, 0x71, 0x2a, 0xa8, 0x0d, 0x6d, 0xa5, 0xcf, 0x7a, 0x89, 0x5a, 0x33, 0x07, 0x60, 0x9e, 0x47,
+	0xd5, 0x04, 0x0b, 0x88, 0x87, 0x96, 0xa6, 0x4b, 0xbc, 0x52, 0xf9, 0xb8, 0x56, 0xa1, 0x7c, 0x76,
+	0x06, 0x26, 0x3a, 0x75, 0x68, 0x0f, 0x9a, 0x69, 0x1e, 0x69, 0x73, 0x79, 0x64, 0x17, 0x60, 0xcc,
+	0xde, 0xab, 0xa4, 0x63, 0x68, 0xc5, 0x79, 0xe4, 0x0b, 0xa5, 0x1d, 0x5a, 0xb1, 0x5b, 0x80, 0xd2,
+	0xa4, 0x43, 0xce, 0xc1, 0x4a, 0x54, 0x18, 0x89, 0x8f, 0xa5, 0xb7, 0xc8, 0x64, 0xe5, 0x35, 0xb1,
+	0xf6, 0x8c, 0x25, 0x76, 0x0d, 0x9d, 0x29, 0xb6, 0xee, 0x4b, 0x1e, 0xc2, 0xd1, 0x64, 0x25, 0x94,
+	0x17, 0x88, 0x3a, 0xbe, 0x0f, 0x87, 0xde, 0xba, 0x84, 0x5e, 0xe2, 0x56, 0x72, 0xf4, 0xd3, 0xd0,
+	0x6c, 0xe7, 0x42, 0xad, 0xc2, 0x85, 0xa0, 0x57, 0x70, 0x80, 0x9a, 0x76, 0xf8, 0x36, 0x73, 0xbb,
+	0xcb, 0x77, 0x59, 0x0e, 0xa0, 0x59, 0x50, 0xa0, 0x26, 0xdf, 0x50, 0xb3, 0x2d, 0xbe, 0x0d, 0xe6,
+	0x06, 0x0c, 0x6c, 0x99, 0x7c, 0xc9, 0x7d, 0x69, 0x77, 0x84, 0x8e, 0xa1, 0x3f, 0x2b, 0x5f, 0xbb,
+	0x7e, 0xe3, 0x53, 0xf1, 0xf1, 0xa3, 0x44, 0xa6, 0x61, 0x16, 0xca, 0x98, 0x02, 0xaf, 0x79, 0xda,
+	0x26, 0xdf, 0x60, 0x2b, 0xda, 0x8a, 0x21, 0x6f, 0x32, 0x0e, 0xfe, 0xb3, 0xb2, 0x43, 0xe8, 0x03,
+	0x74, 0x1f, 0x8b, 0xdc, 0x3c, 0x13, 0x9a, 0x10, 0xed, 0xf2, 0x1d, 0xa8, 0x76, 0x8f, 0xff, 0x61,
+	0xe7, 0x10, 0xbf, 0x85, 0xff, 0xf3, 0xfd, 0x6f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x8f, 0xee, 0x59,
+	0x6d, 0xde, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -371,6 +455,10 @@ type GreetServiceClient interface {
 	GreetAlot(ctx context.Context, in *GreetRequest, opts ...grpc.CallOption) (GreetService_GreetAlotClient, error)
 	// Exercise:
 	PrimeNumberDecomposition(ctx context.Context, in *PMRequest, opts ...grpc.CallOption) (GreetService_PrimeNumberDecompositionClient, error)
+	// Client streaming - ideal for uploading bulk payload to server
+	LongGreet(ctx context.Context, opts ...grpc.CallOption) (GreetService_LongGreetClient, error)
+	// Exercise :
+	ComputeAverage(ctx context.Context, opts ...grpc.CallOption) (GreetService_ComputeAverageClient, error)
 }
 
 type greetServiceClient struct {
@@ -463,6 +551,74 @@ func (x *greetServicePrimeNumberDecompositionClient) Recv() (*PMResponse, error)
 	return m, nil
 }
 
+func (c *greetServiceClient) LongGreet(ctx context.Context, opts ...grpc.CallOption) (GreetService_LongGreetClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_GreetService_serviceDesc.Streams[2], "/GreetService/LongGreet", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &greetServiceLongGreetClient{stream}
+	return x, nil
+}
+
+type GreetService_LongGreetClient interface {
+	Send(*GreetRequest) error
+	CloseAndRecv() (*GreetResponse, error)
+	grpc.ClientStream
+}
+
+type greetServiceLongGreetClient struct {
+	grpc.ClientStream
+}
+
+func (x *greetServiceLongGreetClient) Send(m *GreetRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *greetServiceLongGreetClient) CloseAndRecv() (*GreetResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(GreetResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *greetServiceClient) ComputeAverage(ctx context.Context, opts ...grpc.CallOption) (GreetService_ComputeAverageClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_GreetService_serviceDesc.Streams[3], "/GreetService/ComputeAverage", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &greetServiceComputeAverageClient{stream}
+	return x, nil
+}
+
+type GreetService_ComputeAverageClient interface {
+	Send(*NumberRequest) error
+	CloseAndRecv() (*AverageResponse, error)
+	grpc.ClientStream
+}
+
+type greetServiceComputeAverageClient struct {
+	grpc.ClientStream
+}
+
+func (x *greetServiceComputeAverageClient) Send(m *NumberRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *greetServiceComputeAverageClient) CloseAndRecv() (*AverageResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(AverageResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // GreetServiceServer is the server API for GreetService service.
 type GreetServiceServer interface {
 	Greet(context.Context, *GreetRequest) (*GreetResponse, error)
@@ -472,6 +628,10 @@ type GreetServiceServer interface {
 	GreetAlot(*GreetRequest, GreetService_GreetAlotServer) error
 	// Exercise:
 	PrimeNumberDecomposition(*PMRequest, GreetService_PrimeNumberDecompositionServer) error
+	// Client streaming - ideal for uploading bulk payload to server
+	LongGreet(GreetService_LongGreetServer) error
+	// Exercise :
+	ComputeAverage(GreetService_ComputeAverageServer) error
 }
 
 // UnimplementedGreetServiceServer can be embedded to have forward compatible implementations.
@@ -489,6 +649,12 @@ func (*UnimplementedGreetServiceServer) GreetAlot(req *GreetRequest, srv GreetSe
 }
 func (*UnimplementedGreetServiceServer) PrimeNumberDecomposition(req *PMRequest, srv GreetService_PrimeNumberDecompositionServer) error {
 	return status.Errorf(codes.Unimplemented, "method PrimeNumberDecomposition not implemented")
+}
+func (*UnimplementedGreetServiceServer) LongGreet(srv GreetService_LongGreetServer) error {
+	return status.Errorf(codes.Unimplemented, "method LongGreet not implemented")
+}
+func (*UnimplementedGreetServiceServer) ComputeAverage(srv GreetService_ComputeAverageServer) error {
+	return status.Errorf(codes.Unimplemented, "method ComputeAverage not implemented")
 }
 
 func RegisterGreetServiceServer(s *grpc.Server, srv GreetServiceServer) {
@@ -573,6 +739,58 @@ func (x *greetServicePrimeNumberDecompositionServer) Send(m *PMResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _GreetService_LongGreet_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(GreetServiceServer).LongGreet(&greetServiceLongGreetServer{stream})
+}
+
+type GreetService_LongGreetServer interface {
+	SendAndClose(*GreetResponse) error
+	Recv() (*GreetRequest, error)
+	grpc.ServerStream
+}
+
+type greetServiceLongGreetServer struct {
+	grpc.ServerStream
+}
+
+func (x *greetServiceLongGreetServer) SendAndClose(m *GreetResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *greetServiceLongGreetServer) Recv() (*GreetRequest, error) {
+	m := new(GreetRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _GreetService_ComputeAverage_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(GreetServiceServer).ComputeAverage(&greetServiceComputeAverageServer{stream})
+}
+
+type GreetService_ComputeAverageServer interface {
+	SendAndClose(*AverageResponse) error
+	Recv() (*NumberRequest, error)
+	grpc.ServerStream
+}
+
+type greetServiceComputeAverageServer struct {
+	grpc.ServerStream
+}
+
+func (x *greetServiceComputeAverageServer) SendAndClose(m *AverageResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *greetServiceComputeAverageServer) Recv() (*NumberRequest, error) {
+	m := new(NumberRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 var _GreetService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "GreetService",
 	HandlerType: (*GreetServiceServer)(nil),
@@ -596,6 +814,16 @@ var _GreetService_serviceDesc = grpc.ServiceDesc{
 			StreamName:    "PrimeNumberDecomposition",
 			Handler:       _GreetService_PrimeNumberDecomposition_Handler,
 			ServerStreams: true,
+		},
+		{
+			StreamName:    "LongGreet",
+			Handler:       _GreetService_LongGreet_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "ComputeAverage",
+			Handler:       _GreetService_ComputeAverage_Handler,
+			ClientStreams: true,
 		},
 	},
 	Metadata: "greet.proto",

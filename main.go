@@ -5,8 +5,8 @@ import (
 	"grpcourse/cmd"
 )
 
-func main() { 
-	
+func main() {
+
 	if err := cmd.Execute(); err != nil {
 		fmt.Println(err)
 	}

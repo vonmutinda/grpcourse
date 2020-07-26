@@ -12,6 +12,12 @@ service GreetService {
 
     // Exercise: 
     rpc PrimeNumberDecomposition (PMRequest) returns (stream PMResponse);
+
+    // Client streaming - ideal for uploading bulk payload to server
+    rpc LongGreet(stream GreetRequest) returns(GreetResponse);
+
+    // Exercise :
+    rpc ComputeAverage(stream NumberRequest) returns (AverageResponse);
 }
 
 message Greeting {
@@ -43,4 +49,12 @@ message PMRequest {
 
 message PMResponse {
     int64 prime_factor = 1;
+}
+
+message NumberRequest {
+    int64 number = 1;
+}
+
+message AverageResponse {
+    double average = 1;
 }

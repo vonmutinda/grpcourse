@@ -1,7 +1,7 @@
 APP = "gRPC"
 
 run:
-	go run main.go 
+	go fmt ./... 
 
 build:
 	go build -o ${APP} .
