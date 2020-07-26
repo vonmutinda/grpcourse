@@ -7,8 +7,8 @@
 ## Concepts Explored
 - [x] Unary Streaming 
 - [x] Server Streaming
-- [ ] Client Streaming  
-- [ ] Bi-directional Streaming 
+- [x] Client Streaming  
+- [x] Bi-directional Streaming 
 - [ ] Error Hanlding
 - [ ] Security
 - [ ] CRUD with MongoDB 

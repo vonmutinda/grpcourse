@@ -18,6 +18,10 @@ service GreetService {
 
     // Exercise :
     rpc ComputeAverage(stream NumberRequest) returns (AverageResponse);
+
+
+    // BiDi streaming 
+    rpc GreetEveryone(stream GreetRequest) returns (stream GreetResponse);
 }
 
 message Greeting {

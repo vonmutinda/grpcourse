@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"strconv"
+	"time"
 
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
@@ -47,6 +48,9 @@ func start() {
 	//3. Client streaming
 	doClientStreaming(client)
 	doComputeAverage(client)
+
+	// 4. BiDi streaming
+	doBiDiStreaming(client)
 
 }
 
@@ -190,4 +194,70 @@ func doComputeAverage(c greet.GreetServiceClient) {
 	}
 
 	fmt.Printf("(%v)Average of %v = %v\n", len(vals), vals, res.GetAverage())
+}
+
+func doBiDiStreaming(c greet.GreetServiceClient) {
+
+	bic, err := c.GreetEveryone(context.Background())
+
+	if err != nil {
+		log.Fatalf("cannot create bi-di client stream : %v", err)
+	}
+
+	requests := []*greet.GreetRequest{
+		{Greeting: &greet.Greeting{FirstName: "Jonas", SecondName: "Khanwald"}},
+		{Greeting: &greet.Greeting{FirstName: "Mikkel", SecondName: "Khanwald"}},
+		{Greeting: &greet.Greeting{FirstName: "Martha", SecondName: "Nielsen"}},
+		{Greeting: &greet.Greeting{FirstName: "Hannah", SecondName: "Khanwald"}},
+		{Greeting: &greet.Greeting{FirstName: "Ulrich", SecondName: "Nielsen"}},
+		{Greeting: &greet.Greeting{FirstName: "Katharina", SecondName: "Nielsen"}},
+		{Greeting: &greet.Greeting{FirstName: "Charlotte", SecondName: "Doppler"}},
+	}
+
+	done := make(chan struct{})
+
+	// send stream to server
+	go func() {
+
+		for _, req := range requests {
+
+			time.Sleep(300 * time.Millisecond)
+
+			if err := bic.Send(req); err != nil {
+				log.Fatalf("cannot send request to greet everyone : %v", err)
+			}
+		}
+
+		defer bic.CloseSend()
+	}()
+
+	// receive stream from server
+	go func() {
+
+		for {
+
+			res, err := bic.Recv()
+
+			if err == io.EOF {
+
+				log.Printf("done greeting everyone : %v", err)
+
+				break
+			}
+
+			if err != nil {
+
+				log.Fatalf("cannot receive greeting from greet everyone : %v", err)
+
+				break
+			}
+
+			fmt.Printf("res : %v\n", res.GetResponse())
+		}
+
+		close(done)
+
+	}()
+
+	<-done
 }

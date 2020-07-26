@@ -56,6 +56,8 @@ func serve() {
 // Greet -
 func (g *Server) Greet(ctx context.Context, req *greet.GreetRequest) (*greet.GreetResponse, error) {
 
+	g.Logger.Infof("Greet func invoked")
+
 	var fName, lName string
 
 	fName = req.Greeting.GetFirstName()
@@ -73,6 +75,8 @@ func (g *Server) Greet(ctx context.Context, req *greet.GreetRequest) (*greet.Gre
 // Sum -
 func (g *Server) Sum(ctx context.Context, req *greet.SumRequest) (*greet.SumResponse, error) {
 
+	g.Logger.Infof("Sum func invoked")
+
 	var a, b int64
 
 	a = req.GetA()
@@ -86,7 +90,7 @@ func (g *Server) Sum(ctx context.Context, req *greet.SumRequest) (*greet.SumResp
 // GreetAlot - server streaming
 func (g *Server) GreetAlot(req *greet.GreetRequest, stream greet.GreetService_GreetAlotServer) error {
 
-	g.Logger.Infof("Now streaming ... ")
+	g.Logger.Infof("GreetAlot func invoked")
 
 	name := req.Greeting.GetFirstName() + " " + req.Greeting.GetSecondName()
 
@@ -110,6 +114,8 @@ func (g *Server) GreetAlot(req *greet.GreetRequest, stream greet.GreetService_Gr
 
 // PrimeNumberDecomposition -
 func (g *Server) PrimeNumberDecomposition(req *greet.PMRequest, stream greet.GreetService_PrimeNumberDecompositionServer) error {
+
+	g.Logger.Infof("PrimeNumberDecomposition func invoked")
 
 	number := req.GetNumber()
 
@@ -143,6 +149,8 @@ func (g *Server) PrimeNumberDecomposition(req *greet.PMRequest, stream greet.Gre
 // LongGreet -
 func (g *Server) LongGreet(stream greet.GreetService_LongGreetServer) error {
 
+	g.Logger.Infof("LongGreet func invoked")
+
 	for {
 
 		req, err := stream.Recv()
@@ -172,6 +180,8 @@ func (g *Server) LongGreet(stream greet.GreetService_LongGreetServer) error {
 // ComputeAverage -
 func (g *Server) ComputeAverage(stream greet.GreetService_ComputeAverageServer) error {
 
+	g.Logger.Infof("ComputeAverage func invoked")
+
 	var (
 		sum     int64 = 0
 		counter int64 = 0
@@ -196,4 +206,33 @@ func (g *Server) ComputeAverage(stream greet.GreetService_ComputeAverageServer) 
 		counter++
 	}
 
+}
+
+// GreetEveryone - 
+func (g *Server)GreetEveryone(stream greet.GreetService_GreetEveryoneServer) error {
+
+	g.Logger.Infof("GreetEveryone func invoked")
+
+	for {
+
+		req, err := stream.Recv()
+
+		if err == io.EOF {
+			g.Logger.Infof("GreetEveryone stream is done for") 
+			return nil
+		} 
+
+		if err != nil {
+			return fmt.Errorf("could not read greetings from client stream : %v", err)
+		}
+
+		res := &greet.GreetResponse{ Response: "Hi " + req.Greeting.FirstName }
+
+		if err := stream.Send(res); err != nil {
+			g.Logger.Fatalf("cannot send greet everyone res : %v", err)
+
+			return err
+		}
+	}
+	
 }
