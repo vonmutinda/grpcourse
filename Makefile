@@ -14,3 +14,4 @@ client:
 
 proto:
 	protoc -I data/protos/ data/protos/greet.proto --go_out=plugins=grpc:data/protos/greet
+	protoc -I data/protos/ data/protos/blog.proto --go_out=plugins=grpc:data/protos/blog
