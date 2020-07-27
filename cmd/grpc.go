@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"grpcourse/cmd/server"
-	"grpcourse/data/protos/blog"
+	blogpb "grpcourse/data/protos/blog"
 	"grpcourse/data/protos/greet"
 	"net"
 	"os"
@@ -67,7 +67,7 @@ func serve() {
 	// - you could alternatively create a seperate server for the blog
 	greet.RegisterGreetServiceServer(gs, svr)
 
-	blog.RegisterBlogServiceServer(gs, svr)
+	blogpb.RegisterBlogServiceServer(gs, svr)
 
 	// 4. create a tcp listener
 	lis, err := net.Listen("tcp", ":50051")

@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option go_package = "blogpb";
+
 message Blog {
     string id = 1;
     string author_id = 2;
@@ -8,5 +10,55 @@ message Blog {
 }
 
 service BlogService {
+
+    // CreateBlog - inserts a new blog to the db
+    rpc CreateBlog(CreateBlogRequest) returns (CreateBlogResponse);
+
+    // ReadBlog - fetches blog record from collection
+    rpc ReadBlog(ReadBlogRequest) returns (ReadBlogResponse);
+
+    // ListBlog - fetches all blogs from blogs collection
+    // rpc ListBlog(ListBlogRequest) returns (ListBlogResponse);
+
+    // // UpdateBlog - updates an existing record of a blog and returns updated version
+    // rpc UpdateBlog(UpdateBlogRequest) returns (UpdateBlogResponse);
+
+    // // DeleteBlog - deletes an existing record of a blog
+    // rpc DeleteBlog(DeleteBlogRequest) returns (DeleteBlogResponse);
+}
+
+// CreateBlog messages
+message CreateBlogRequest {
+    Blog blog = 1;
+}
+
+message CreateBlogResponse {
+    Blog blog = 1; // will have blog_id
+}
+
+// ReadBlog messages 
+message ReadBlogRequest {
+    string id = 1;
+}
+
+message ReadBlogResponse {
+    Blog blog = 1;
+}
+
+// UpdateBlog messaages
+message UpdateBlogRequest {
+    Blog blog = 1;
+}
+
+message UpdateBlogResponse {
+    Blog blog = 1; // update version of the blog
+}
+
+// DeleteBlog messages
+message DeleteBlogRequest {
+    string id = 1;
+}
+
+message DeleteBlogResponse {
     
 }

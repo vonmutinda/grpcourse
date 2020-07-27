@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"grpcourse/cmd/client"
+	blogpb "grpcourse/data/protos/blog"
 	"grpcourse/data/protos/greet"
 	"log"
 
@@ -54,10 +55,14 @@ func start() {
 
 	defer conn.Close()
 
-	client := greet.NewGreetServiceClient(conn)
+	// 1. Coursework - greet and calculator 
+	// gclient := greet.NewGreetServiceClient(conn)
+	// exercise(gclient) // comment or uncomment
 
-	// course work
-	exercise(client) // comment or uncomment
+	// 2. blog service
+	bclient := blogpb.NewBlogServiceClient(conn) 
+	// client.DoCreateBlog(bclient) 
+	client.DoReadBlog(bclient)
 
 }
 
