@@ -55,13 +55,13 @@ func start() {
 
 	defer conn.Close()
 
-	// 1. Coursework - greet and calculator 
-	// gclient := greet.NewGreetServiceClient(conn)
-	// exercise(gclient) // comment or uncomment
+	// 1. Coursework - greet and calculator
+	gclient := greet.NewGreetServiceClient(conn)
+	exercise(gclient) // comment or uncomment
 
 	// 2. blog service
-	bclient := blogpb.NewBlogServiceClient(conn) 
-	// client.DoCreateBlog(bclient) 
+	bclient := blogpb.NewBlogServiceClient(conn)
+	client.DoCreateBlog(bclient)
 	client.DoReadBlog(bclient)
 
 }

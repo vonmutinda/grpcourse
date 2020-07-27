@@ -16,7 +16,7 @@ func DoCreateBlog(client blogpb.BlogServiceClient) {
 		Blog: &blogpb.Blog{
 			AuthorId: "1001",
 			Title:    "Introduction to gRPC",
-			Body: `In this section we will be looking at \n
+			Body: `In this section we will be looking at
 			the minutiea of gRPC....
 		`,
 		},

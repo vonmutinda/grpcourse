@@ -7,6 +7,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -72,16 +73,15 @@ func (b *Server) ReadBlog(ctx context.Context, req *blogpb.ReadBlogRequest) (*bl
 
 	if err := b.DB.Collection("blog").FindOne(ctx, bson.D{{"_id", oid}}).Decode(data); err != nil {
 
-		b.Logger.Errorf("cannot fetch blog record : %v", err)
+		if err == mongo.ErrNoDocuments {
+			b.Logger.Errorf("document not found : %v", err)
+			return nil, status.Errorf(codes.NotFound, fmt.Sprintf("blog not found : %v", err))
+		}
 
-		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("blog not found : %v", err),)
+		b.Logger.Errorf("could not fetch blog : %v", err)
 	}
 
-	fmt.Printf("data fetched : %+v\n", data)
-
-	if err != nil {
-		b.Logger.Errorf("cannot find blog id %v : %v", oid, err)
-	}
+	b.Logger.Printf("document fetched : %+v\n", data)
 
 	return &blogpb.ReadBlogResponse{
 		Blog: &blogpb.Blog{
