@@ -1,16 +1,15 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"grpcourse/cmd/server"
 	"grpcourse/data/protos/blog"
 	"grpcourse/data/protos/greet"
-	"log"
 	"net"
 	"os"
 	"os/signal"
 
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -28,11 +27,6 @@ var grpcServer = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(grpcServer)
-}
-
-// Blog -
-type Blog struct {
-	Logger *logrus.Logger
 }
 
 // RunServer - run grpc server
@@ -69,23 +63,24 @@ func serve() {
 	// reflection allows inspection of gRPC API endpoints
 	reflection.Register(gs)
 
-	// 3. Register services - you could create a seperate server for the blog
+	// 3. Register services
+	// - you could alternatively create a seperate server for the blog
 	greet.RegisterGreetServiceServer(gs, svr)
 
 	blog.RegisterBlogServiceServer(gs, svr)
 
+	// 4. create a tcp listener
 	lis, err := net.Listen("tcp", ":50051")
 
 	if err != nil {
-		log.Fatalf("could not get listener : %v", err)
+		svr.Logger.Fatalf("could not get listener : %v", err)
 	}
 
 	go func() {
 
 		if err := gs.Serve(lis); err != nil {
-			log.Fatalf("gRPC server couldn't serve : %v", err)
+			svr.Logger.Fatalf("gRPC server couldn't listen to port: %v", err)
 		}
-
 	}()
 
 	// Gracefully shut down the grpc server
@@ -95,4 +90,14 @@ func serve() {
 	signal.Notify(kill, os.Interrupt)
 
 	<-kill
+
+	svr.Logger.Println("Server gracefully shutting down....")
+
+	svr.Logger.Println("Closing mongodb connection....")
+
+	svr.DB.Client().Disconnect(context.TODO())
+
+	lis.Close()
+
+	os.Exit(0)
 }

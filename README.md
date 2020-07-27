@@ -15,12 +15,16 @@
 
 ### Local Set Up
 + Clone the app `git clone https://github.com/vonmutinda/grpcourse.git` 
++ Install `MongoDB` databasase. 
 + Inspect the `Makefile` for the various commands of interracting with the app. 
++ Run `make server` and `make client` on two seperate tabs.
+
 
 ## Technologies Used 
 A list of technologies used in this project:
 - [Golang version `go1.14.6`](https://golang.org) 
 - [gRPC](https://github.com/grpc/grpc-go) A RPC framework that leverages on `HTTP/2` protocol which has powerful multiplexing capabilites.
+- [MongoDB](https://www.mongodb.com/try/download/community) Community Server
 
 ## Resources (Further Read)
 Some of the resources that I found useful `Go/Golang`. 

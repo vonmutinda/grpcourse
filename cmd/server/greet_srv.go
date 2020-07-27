@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"grpcourse/data/db"
 	"grpcourse/data/protos/greet"
 	"io"
 	"math"
@@ -10,6 +11,7 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
+	"go.mongodb.org/mongo-driver/mongo"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -17,12 +19,15 @@ import (
 // Server -
 type Server struct {
 	Logger *logrus.Logger
+	DB     *mongo.Database
 }
 
 // NewServer - returns Server
 func NewServer() *Server {
+
 	return &Server{
 		Logger: logrus.New(),
+		DB:     db.GetDB(),
 	}
 }
 
@@ -174,7 +179,7 @@ func (g *Server) ComputeAverage(stream greet.GreetService_ComputeAverageServer) 
 		sum += req.GetNumber()
 
 		if err == io.EOF {
-			fmt.Printf("sum : %v counter : %v\n", sum, counter)
+			g.Logger.Printf("sum : %v counter : %v\n", sum, counter)
 			res := &greet.AverageResponse{Average: float64(sum / counter)}
 			return stream.SendAndClose(res)
 		}

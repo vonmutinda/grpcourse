@@ -37,6 +37,8 @@ func DoUnary(c greet.GreetServiceClient) {
 		}
 
 		log.Printf("could not greet : %v", err)
+
+		return
 	}
 
 	fmt.Println("Greetings :\n", greeting.Response)
@@ -95,6 +97,8 @@ func DoGreetStream(c greet.GreetServiceClient) {
 
 		if err != nil {
 			log.Fatalf("cannot receive greating from stream : %v", err)
+
+			return
 		}
 
 		fmt.Println("messages : ", res.GetResponse())
@@ -104,7 +108,7 @@ func DoGreetStream(c greet.GreetServiceClient) {
 
 }
 
-// DoPMStream -
+// DoPMStream - server streams prime number factors to the client
 func DoPMStream(c greet.GreetServiceClient) {
 
 	req := &greet.PMRequest{Number: 120}
@@ -127,7 +131,7 @@ func DoPMStream(c greet.GreetServiceClient) {
 			fmt.Printf("could not read from stream : %v", err)
 		}
 
-		fmt.Println(res.GetPrimeFactor())
+		fmt.Println("= ", res.GetPrimeFactor())
 	}
 
 	fmt.Println("end of streaming. Bye.")
@@ -143,7 +147,6 @@ func DoClientStreaming(c greet.GreetServiceClient) {
 	}
 
 	for i := 0; i <= 10; i++ {
-		// go func(n int) {
 
 		req := &greet.GreetRequest{
 			Greeting: &greet.Greeting{
@@ -155,7 +158,6 @@ func DoClientStreaming(c greet.GreetServiceClient) {
 		if err := lc.Send(req); err != nil {
 			log.Fatalf("cannot create greeting request : %v", err)
 		}
-		// }(i)
 	}
 
 	res, err := lc.CloseAndRecv()
@@ -168,7 +170,8 @@ func DoClientStreaming(c greet.GreetServiceClient) {
 
 }
 
-// DoComputeAverage -
+// DoComputeAverage - client streams values to the server
+// server computes average and sends the response
 func DoComputeAverage(c greet.GreetServiceClient) {
 
 	ca, err := c.ComputeAverage(context.Background())
@@ -200,7 +203,7 @@ func DoComputeAverage(c greet.GreetServiceClient) {
 	fmt.Printf("(%v)Average of %v = %v\n", len(vals), vals, res.GetAverage())
 }
 
-// DoBiDiStreaming -
+// DoBiDiStreaming - it's a two way streaming feature
 func DoBiDiStreaming(c greet.GreetServiceClient) {
 
 	bic, err := c.GreetEveryone(context.Background())
@@ -245,7 +248,7 @@ func DoBiDiStreaming(c greet.GreetServiceClient) {
 
 			if err == io.EOF {
 
-				log.Printf("done greeting everyone : %v", err)
+				log.Println("Done greeting everyone!")
 
 				break
 			}
