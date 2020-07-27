@@ -32,7 +32,7 @@ func init() {
 func start() {
 
 	// by default
-	tls := true
+	tls := false
 
 	opts := grpc.WithInsecure()
 
@@ -52,7 +52,7 @@ func start() {
 
 	// grpc.Dial(target should be explicit rather than the port)
 	// eg. "localhost:PORT" rather than ":PORT"
-	conn, err := grpc.Dial("localhost:9001", opts)
+	conn, err := grpc.Dial("localhost:50051", opts)
 
 	if err != nil {
 		panic("could not establish connection")

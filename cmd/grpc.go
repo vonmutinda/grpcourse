@@ -16,6 +16,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 )
 
@@ -44,8 +45,8 @@ func serve() {
 
 	// Server instance
 	svr := &Server{logrus.New()}
-	
-	tls := true 
+
+	tls := false
 
 	opts := []grpc.ServerOption{}
 
@@ -54,22 +55,25 @@ func serve() {
 		// cert and pem - pass full path
 		cert := "ssl/server.crt"
 		pem := "ssl/server.pem"
-	
+
 		cred, err := credentials.NewServerTLSFromFile(cert, pem)
-	
+
 		if err != nil {
 			svr.Logger.Errorf("cannot creat tls cert from file : %v", err)
 		}
-	
+
 		// gRPC server with opts
 		opts = append(opts, grpc.Creds(cred))
-	} 
+	}
 
 	gs := grpc.NewServer(opts...)
 
+	// reflection allows inspection of gRPC API endpoints
+	reflection.Register(gs)
+
 	greet.RegisterGreetServiceServer(gs, svr)
 
-	lis, err := net.Listen("tcp", ":9001")
+	lis, err := net.Listen("tcp", ":50051")
 
 	if err != nil {
 		log.Fatalf("could not get listener : %v", err)

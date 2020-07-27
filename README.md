@@ -10,7 +10,7 @@
 - [x] Client Streaming  
 - [x] Bi-directional Streaming 
 - [x] Error Handling & RPC deadlines
-- [ ] Security
+- [x] Security - SSL Authentication
 - [ ] CRUD with MongoDB 
 
 ### Local Set Up
@@ -20,7 +20,7 @@
 ## Technologies Used 
 A list of technologies used in this project:
 - [Golang version `go1.14.6`](https://golang.org) 
-- [gRPC](https://github.com/grpc/grpc-go) A RPC framework that leverages on `HTTP/2` protocol powerful multiplexing capabilites.
+- [gRPC](https://github.com/grpc/grpc-go) A RPC framework that leverages on `HTTP/2` protocol which has powerful multiplexing capabilites.
 
 ## Resources (Further Read)
 Some of the resources that I found useful `Go/Golang`. 
