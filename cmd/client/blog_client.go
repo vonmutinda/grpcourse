@@ -56,7 +56,7 @@ func DoCreateBlog(client blogpb.BlogServiceClient) {
 	}
 
 	reader := bufio.NewReader(file)
-	buffer := make([]byte, 1024)
+	buffer := make([]byte, 1024) // 1KB buffer
 
 	for {
 
@@ -80,6 +80,13 @@ func DoCreateBlog(client blogpb.BlogServiceClient) {
 		}
 
 		if err := stream.Send(req); err != nil {
+
+			resErr, ok := status.FromError(err) 
+
+			if resErr.Code() == codes.Unknown && ok {
+				// log something
+			}	 
+
 			log.Fatalf("cannot send stream of image chunk to server : %v", err)
 		}
 
