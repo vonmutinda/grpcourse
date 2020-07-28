@@ -16,6 +16,11 @@
 - [x] File Upload - (client streaming)
 - [x] CRUD with MongoDB 
 
+## TODO
+- [ ] Server-side pagination with MongoDB
+- [ ] Caching with Redis
+- [ ] Unit Testing
+
 ### Local Set Up
 This code is entirely educational and definitely not production-ready 
 + Clone the app `git clone https://github.com/vonmutinda/grpcourse.git` 
