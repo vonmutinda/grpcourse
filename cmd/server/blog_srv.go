@@ -96,7 +96,7 @@ func (b *Server) CreateBlog(stream blogpb.BlogService_CreateBlogServer) error {
 		Body:       blog.GetBody(),
 	}
 
-	// pass nil to default to context.Background()
+	// pass context.TODO() or nil to default to context.Background()
 	res, err := b.DB.Collection("blog").InsertOne(nil, data)
 
 	if err != nil {
@@ -157,6 +157,64 @@ func (b *Server) ReadBlog(ctx context.Context, req *blogpb.ReadBlogRequest) (*bl
 			AuthorId: data.AuthorID,
 			Title:    data.Title,
 			Body:     data.Body,
+		},
+	}, nil
+}
+
+// UpdateBlog -
+func (b *Server) UpdateBlog(ctx context.Context, req *blogpb.UpdateBlogRequest) (*blogpb.UpdateBlogResponse, error) {
+
+	b.Logger.Infof("UpdateBlog func invoked")
+
+	// 1. Get blog from request
+	blog := req.GetBlog()
+
+	oid, err := primitive.ObjectIDFromHex(blog.GetId())
+
+	if err != nil {
+		b.Logger.Errorf("could not parse blog id : %v", err)
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("cannot parse blog id : %v", err))
+	}
+
+	// 1 a. Create image to file - ideally, image metadata could be passed from client
+	image := new(bytes.Buffer)
+	file, err := os.Create("data/images/updated_new_image.jpg")
+
+	if err != nil {
+		b.Logger.Errorf("cannot open image : %v", err)
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("cannot open image : %v", err))
+	}
+
+	image.Write(req.GetImage())  // write bytes to buffer
+	_, err = image.WriteTo(file) // write to file
+
+	if err != nil {
+		b.Logger.Errorf("cannot save image : %v", err)
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("cannot save image to disk : %v", err))
+	}
+
+	// 2b. alternatively
+	datab := &blogItem{
+		AuthorID:   blog.GetAuthorId(),
+		Title:      blog.GetTitle(),
+		Body:       blog.GetBody(),
+		CoverImage: file.Name(),
+	}
+
+	_, err = b.DB.Collection("blog").ReplaceOne(ctx, bson.D{{"_id", oid}}, datab)
+
+	if err != nil {
+		b.Logger.Errorf("cannot update record : %v", err)
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("cannot update blog : %v", err))
+	}
+
+	return &blogpb.UpdateBlogResponse{
+		Blog: &blogpb.Blog{
+			Id:        oid.Hex(),
+			AuthorId:  datab.AuthorID,
+			Title:     datab.Title,
+			Body:      datab.Body,
+			ImagePath: datab.CoverImage,
 		},
 	}, nil
 }

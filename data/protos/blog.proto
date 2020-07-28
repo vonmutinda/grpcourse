@@ -15,14 +15,14 @@ service BlogService {
     // CreateBlog - inserts a new blog to the db
     rpc CreateBlog(stream CreateBlogRequest) returns (CreateBlogResponse);
 
-    // ReadBlog - fetches blog record from collection
+    // ReadBlog - fetches blog record from collection. Return NOT_FOUND if missing
     rpc ReadBlog(ReadBlogRequest) returns (ReadBlogResponse);
 
     // ListBlog - fetches all blogs from blogs collection
     // rpc ListBlog(ListBlogRequest) returns (ListBlogResponse);
 
     // // UpdateBlog - updates an existing record of a blog and returns updated version
-    // rpc UpdateBlog(UpdateBlogRequest) returns (UpdateBlogResponse);
+    rpc UpdateBlog(UpdateBlogRequest) returns (UpdateBlogResponse);  // Return NOT_FOUND if missing
 
     // // DeleteBlog - deletes an existing record of a blog
     // rpc DeleteBlog(DeleteBlogRequest) returns (DeleteBlogResponse);
@@ -57,10 +57,11 @@ message ReadBlogResponse {
 // UpdateBlog messaages
 message UpdateBlogRequest {
     Blog blog = 1;
+    bytes image = 2;
 }
 
 message UpdateBlogResponse {
-    Blog blog = 1; // update version of the blog
+    Blog blog = 1; // return updated version of the blog
 }
 
 // DeleteBlog messages

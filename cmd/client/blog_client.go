@@ -58,14 +58,14 @@ func DoCreateBlog(client blogpb.BlogServiceClient) {
 	reader := bufio.NewReader(file)
 	buffer := make([]byte, 1024) // 1KB buffer
 
-	for {
+	fmt.Println("uploading image chunk ..... ")
 
-		fmt.Println("uploading image chunk ..... ")
+	for {
 
 		n, err := reader.Read(buffer)
 
 		if err == io.EOF {
-			fmt.Printf("image upload complete : %v\n", err)
+			fmt.Println("image upload complete")
 			break
 		}
 
@@ -108,7 +108,7 @@ func DoCreateBlog(client blogpb.BlogServiceClient) {
 func DoReadBlog(client blogpb.BlogServiceClient) {
 
 	req := &blogpb.ReadBlogRequest{
-		Id: "5f1f2df4e60566953662d73f",
+		Id: "5f2011c0f7bc9e1a387c2a1e",
 	}
 
 	res, err := client.ReadBlog(context.Background(), req)
@@ -128,4 +128,58 @@ func DoReadBlog(client blogpb.BlogServiceClient) {
 	}
 
 	fmt.Printf("blog found : %+v\n", res.GetBlog())
+}
+
+// DoUpdateBlog - Update blog content and image as well,
+// rather than streaming the image to server, we'll send raw bytes at a go
+func DoUpdateBlog(client blogpb.BlogServiceClient) {
+
+	// 1. Prepare image into bytes slice
+	file, err := os.Open("data/temp/mojave.jpg")
+
+	if err != nil {
+		fmt.Printf("cannot open image file : %v", err)
+	}
+
+	// get file size and create buffer
+	fi, _ := file.Stat()
+	var buffer = make([]byte, fi.Size())
+
+	_, err = bufio.NewReader(file).Read(buffer)
+
+	if err != nil {
+		log.Fatalf("cannot read file to buffer : %v", err)
+	}
+
+	// 2. create updated body
+	req := &blogpb.UpdateBlogRequest{
+		Blog: &blogpb.Blog{
+			Id:       "5f2011c0f7bc9e1a387c2a1e",
+			AuthorId: "2002",
+			Title:    "This is a new title",
+			Body:     "And the body is not as long as before",
+		},
+		Image: buffer,
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+
+	// 3. update blog
+	res, err := client.UpdateBlog(ctx, req)
+
+	if err != nil {
+		resErr, ok := status.FromError(err)
+
+		if ok && resErr.Code() == codes.Internal {
+			fmt.Printf("internal server errror : %v\n", err)
+			return
+		}
+
+		fmt.Printf("cannot update blog : %v\n", err)
+		return
+	}
+
+	fmt.Printf("Blog updated : %+v\n", res)
+
 }
