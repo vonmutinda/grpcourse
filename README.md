@@ -1,7 +1,7 @@
 ## gRPC - MasterClass
 - A code along repo for [Udemy's gRPC [Golang] Masterclass course](https://www.udemy.com/course/grpc-golang/)
 
-[:mortar_board: Certificate :tada:]()
+[:mortar_board: Certificate :tada:](https://udemy-certificate.s3.amazonaws.com/image/UC-9ae4d613-9868-45a7-8a49-764dc0c0bbd0.jpg)
 
 ## Description
 `gRPC` is a `RPC` framework developed by Google for building high performance APIs. It's uses [Protocol Buffers](https://developers.google.com/protocol-buffers) as the interface definition language. gRPC payloads are significantly smaller than a JSON equivalents hence faster :- low latency over the wire. A good alternative for REST API. 
