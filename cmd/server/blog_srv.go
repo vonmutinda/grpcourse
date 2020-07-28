@@ -139,7 +139,7 @@ func (b *Server) ReadBlog(ctx context.Context, req *blogpb.ReadBlogRequest) (*bl
 
 	data := new(blogItem)
 
-	if err := b.DB.Collection("blog").FindOne(ctx, bson.D{{"_id", oid}}).Decode(data); err != nil {
+	if err := b.DB.Collection("blog").FindOne(ctx, bson.D{primitive.E{Key: "_id", Value: oid}}).Decode(data); err != nil {
 
 		if err == mongo.ErrNoDocuments {
 			b.Logger.Errorf("document not found : %v", err)
@@ -201,7 +201,7 @@ func (b *Server) UpdateBlog(ctx context.Context, req *blogpb.UpdateBlogRequest) 
 		CoverImage: file.Name(),
 	}
 
-	_, err = b.DB.Collection("blog").ReplaceOne(ctx, bson.D{{"_id", oid}}, datab)
+	_, err = b.DB.Collection("blog").ReplaceOne(ctx, bson.D{primitive.E{Key: "_id", Value: oid}}, datab)
 
 	if err != nil {
 		b.Logger.Errorf("cannot update record : %v", err)
@@ -216,5 +216,72 @@ func (b *Server) UpdateBlog(ctx context.Context, req *blogpb.UpdateBlogRequest) 
 			Body:      datab.Body,
 			ImagePath: datab.CoverImage,
 		},
+	}, nil
+}
+
+// DeleteBlog - delete blog from collection
+func (b *Server) DeleteBlog(ctx context.Context, req *blogpb.DeleteBlogRequest) (*blogpb.DeleteBlogResponse, error) {
+
+	b.Logger.Infof("DeleteBlog func invoked")
+
+	id := req.GetId()
+
+	oid, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		b.Logger.Errorf("cannot parse id : %v", err)
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("couldn't parse id : %v", err))
+	}
+
+	_, err = b.DB.Collection("blog").DeleteOne(ctx, bson.D{primitive.E{Key: "_id", Value: oid}})
+
+	if err != nil {
+		b.Logger.Errorf("cannot delete document id %v : %v", id, err)
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("cannot delete document : %v", err))
+	}
+
+	return &blogpb.DeleteBlogResponse{Id: id}, nil
+}
+
+// ListBlog - fetch multiple blogs in a single request
+func (b *Server) ListBlog(ctx context.Context, req *blogpb.ListBlogRequest) (*blogpb.ListBlogResponse, error) {
+
+	b.Logger.Infof("ListBlog func invoked")
+
+	// fetch all documents from blogs collection
+	res, err := b.DB.Collection("blog").Find(ctx, bson.D{{}})
+
+	if err != nil {
+		b.Logger.Errorf("could not fetch blogs : %v", err)
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("cannot fetch blogs : %v", err))
+	}
+
+	// 1. Option A :
+	// -  unmarshall documents to a slice of blogItem, prepare response and send it.
+	// 2. Option B :
+	// -  Using Cursor.Next(), we could do a server stream of the documents to the client
+	// - Either is okay... to the best of my knowledge
+	var blogs []blogItem
+
+	if err := res.All(ctx, &blogs); err != nil {
+		b.Logger.Errorf("cannot unmarshall blogs : %v", err)
+		return nil, status.Errorf(codes.Internal, fmt.Sprintf("couldn't unmarshal blogs : %v", err))
+	}
+
+	// prepare response and return
+	var result []*blogpb.Blog
+
+	for _, b := range blogs {
+		result = append(result, &blogpb.Blog{
+			Id:        b.ID.Hex(),
+			AuthorId:  b.AuthorID,
+			Title:     b.Title,
+			Body:      b.Body,
+			ImagePath: b.CoverImage,
+		})
+	}
+
+	return &blogpb.ListBlogResponse{
+		Blogs: result,
 	}, nil
 }

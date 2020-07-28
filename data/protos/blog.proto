@@ -7,7 +7,7 @@ message Blog {
     string author_id = 2;
     string title = 3;
     string body = 4;
-    string image_path = 5;  
+    string image_path = 5;   
 }
 
 service BlogService {
@@ -19,13 +19,13 @@ service BlogService {
     rpc ReadBlog(ReadBlogRequest) returns (ReadBlogResponse);
 
     // ListBlog - fetches all blogs from blogs collection
-    // rpc ListBlog(ListBlogRequest) returns (ListBlogResponse);
+    rpc ListBlog(ListBlogRequest) returns (ListBlogResponse);
 
     // // UpdateBlog - updates an existing record of a blog and returns updated version
     rpc UpdateBlog(UpdateBlogRequest) returns (UpdateBlogResponse);  // Return NOT_FOUND if missing
 
-    // // DeleteBlog - deletes an existing record of a blog
-    // rpc DeleteBlog(DeleteBlogRequest) returns (DeleteBlogResponse);
+    // DeleteBlog - deletes an existing record of a blog - return id
+    rpc DeleteBlog(DeleteBlogRequest) returns (DeleteBlogResponse);
 }
 
 // CreateBlog messages
@@ -34,11 +34,6 @@ message CreateBlogRequest {
         Blog blog = 1;
         bytes image = 2;
     }
-}
-
-message ImageInfo {
-    string name = 1;
-    string type = 2;
 }
 
 message CreateBlogResponse {
@@ -70,5 +65,14 @@ message DeleteBlogRequest {
 }
 
 message DeleteBlogResponse {
-    
+    string id = 1;
+}
+
+// ListBlog messages
+message ListBlogRequest {
+
+}
+
+message ListBlogResponse {
+    repeated Blog blogs = 1;
 }

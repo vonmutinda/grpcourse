@@ -17,6 +17,8 @@ import (
 // DoCreateBlog -
 func DoCreateBlog(client blogpb.BlogServiceClient) {
 
+	fmt.Println("Creating blog ....")
+
 	// 1. prepare blog
 	req := &blogpb.CreateBlogRequest{
 		Data: &blogpb.CreateBlogRequest_Blog{
@@ -107,6 +109,8 @@ func DoCreateBlog(client blogpb.BlogServiceClient) {
 // DoReadBlog -
 func DoReadBlog(client blogpb.BlogServiceClient) {
 
+	fmt.Println("Fetching blog ....")
+
 	req := &blogpb.ReadBlogRequest{
 		Id: "5f2011c0f7bc9e1a387c2a1e",
 	}
@@ -118,8 +122,7 @@ func DoReadBlog(client blogpb.BlogServiceClient) {
 		resErr, ok := status.FromError(err)
 
 		if resErr.Code() == codes.NotFound && ok {
-			fmt.Printf("blog not found : %v\n", err)
-			return
+			fmt.Printf("blog not found")
 		}
 
 		fmt.Printf("could not fetch blog : %v\n", err)
@@ -133,6 +136,8 @@ func DoReadBlog(client blogpb.BlogServiceClient) {
 // DoUpdateBlog - Update blog content and image as well,
 // rather than streaming the image to server, we'll send raw bytes at a go
 func DoUpdateBlog(client blogpb.BlogServiceClient) {
+
+	fmt.Println("Updating blog ....")
 
 	// 1. Prepare image into bytes slice
 	file, err := os.Open("data/temp/mojave.jpg")
@@ -172,8 +177,7 @@ func DoUpdateBlog(client blogpb.BlogServiceClient) {
 		resErr, ok := status.FromError(err)
 
 		if ok && resErr.Code() == codes.Internal {
-			fmt.Printf("internal server errror : %v\n", err)
-			return
+			fmt.Println("internal server errror")
 		}
 
 		fmt.Printf("cannot update blog : %v\n", err)
@@ -181,5 +185,69 @@ func DoUpdateBlog(client blogpb.BlogServiceClient) {
 	}
 
 	fmt.Printf("Blog updated : %+v\n", res)
+
+}
+
+// DoDeleteBlog - deletes a blog by id
+func DoDeleteBlog(client blogpb.BlogServiceClient) {
+
+	fmt.Println("Deleting blog ....")
+
+	req := &blogpb.DeleteBlogRequest{Id: "5f202d6a64dfb5ea04078b6b"}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	res, err := client.DeleteBlog(ctx, req)
+
+	if err != nil {
+
+		resErr, ok := status.FromError(err)
+
+		if resErr.Code() == codes.InvalidArgument && ok {
+			fmt.Println("invalid blog id")
+		}
+
+		if resErr.Code() == codes.Internal && ok {
+			fmt.Println("internal server error")
+		}
+
+		fmt.Printf("could not delete blog : %v\n", err)
+
+		return
+	}
+
+	fmt.Println("Blog successfully deleted! ID ", res.GetId())
+}
+
+// DoFetchBlogs - fetches lots of blogs
+func DoFetchBlogs(client blogpb.BlogServiceClient) {
+
+	fmt.Println("Listing blogs ....")
+
+	req := &blogpb.ListBlogRequest{}
+
+	// timeout after 10seconds
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	res, err := client.ListBlog(ctx, req)
+
+	if err != nil {
+
+		resErr, ok := status.FromError(err)
+
+		if resErr.Code() == codes.Internal && ok {
+			fmt.Println("internal server error")
+		}
+
+		fmt.Printf("cannot fetch blogs : %v\n", err)
+		return
+	}
+
+	// Fetched blogs :
+	for _, k := range res.GetBlogs() {
+		fmt.Printf("%+v\n\n", k)
+	}
 
 }

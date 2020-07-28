@@ -62,9 +62,10 @@ func start() {
 	// 2. blog service
 	bclient := blogpb.NewBlogServiceClient(conn)
 	client.DoCreateBlog(bclient) // NB: use created id when reading/updating
-	client.DoReadBlog(bclient)
-	client.DoUpdateBlog(bclient)
-
+	// client.DoReadBlog(bclient)
+	// client.DoUpdateBlog(bclient)
+	// client.DoDeleteBlog(bclient)
+	client.DoFetchBlogs(bclient)
 }
 
 func exercise(c greet.GreetServiceClient) {
