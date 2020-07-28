@@ -81,11 +81,11 @@ func DoCreateBlog(client blogpb.BlogServiceClient) {
 
 		if err := stream.Send(req); err != nil {
 
-			resErr, ok := status.FromError(err) 
+			resErr, ok := status.FromError(err)
 
 			if resErr.Code() == codes.Unknown && ok {
 				// log something
-			}	 
+			}
 
 			log.Fatalf("cannot send stream of image chunk to server : %v", err)
 		}
