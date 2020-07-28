@@ -7,12 +7,13 @@ message Blog {
     string author_id = 2;
     string title = 3;
     string body = 4;
+    string image_path = 5;  
 }
 
 service BlogService {
 
     // CreateBlog - inserts a new blog to the db
-    rpc CreateBlog(CreateBlogRequest) returns (CreateBlogResponse);
+    rpc CreateBlog(stream CreateBlogRequest) returns (CreateBlogResponse);
 
     // ReadBlog - fetches blog record from collection
     rpc ReadBlog(ReadBlogRequest) returns (ReadBlogResponse);
@@ -29,7 +30,15 @@ service BlogService {
 
 // CreateBlog messages
 message CreateBlogRequest {
-    Blog blog = 1;
+    oneof data { 
+        Blog blog = 1;
+        bytes image = 2;
+    }
+}
+
+message ImageInfo {
+    string name = 1;
+    string type = 2;
 }
 
 message CreateBlogResponse {

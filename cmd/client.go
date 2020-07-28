@@ -56,8 +56,8 @@ func start() {
 	defer conn.Close()
 
 	// 1. Coursework - greet and calculator
-	gclient := greet.NewGreetServiceClient(conn)
-	exercise(gclient) // comment or uncomment
+	// gclient := greet.NewGreetServiceClient(conn)
+	// exercise(gclient) // comment or uncomment
 
 	// 2. blog service
 	bclient := blogpb.NewBlogServiceClient(conn)
